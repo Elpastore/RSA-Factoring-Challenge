@@ -4,76 +4,36 @@ Module that factorise as many numbrs as possible
 into a product of two smaller numbers
 """
 import sys
-import random
 
 
-def gcd(a, b):
+def factorise(number):
     """
-    Function that give the gcd of two number
+    Function that print the factorisation result
     Args:
-        -a (int)
-        -b (int)
-    Return a
+        -number (int): number to be factorise
     """
-    while b:
-        a, b = b, a % b
-    return a
+    for p in range(2, number):
+        if number % p == 0:
+            q = number // p
+            print("{}={}*{}".format(number, p, q))
+            return
 
 
-def pollards_rho(n):
-    """
-    Pollard's Rho algorithm to factorize a number
-    Args:
-        -n (int): number to factorize
-    """
-    def f(x):
-        return (x**2 + 1) % n
+if len(sys.argv) != 2:
+    print("Usage: python factors.py <file>")
+    sys.exit(1)
 
-    x = 2
-    y = 2
-    d = 1
-
-    while d == 1:
-        x = f(x)
-        y = f(f(y))
-        d = gcd(abs(x - y), n)
-
-    return d, n // d if d != 1 else None
-
-
-def factorize_with_pollard_rho(n):
-    factor1, factor2 = pollards_rho(n)
-    if factor1 is None:
-        return f"{n} is prime"
-    else:
-        return f"{n} = {factor1} * {factor2}"
-
-
-if __name__ == "__main__":
-    """
-    Main program
-    """
-    if len(sys.argv) != 2:
-        print("Usage: python factors.py <file>")
-        sys.exit(1)
-
-    try:
-
-        with open(sys.argv[1], 'r') as file:
-            for line in file:
-                number = int(line.strip())
-                if number <= 1:
-                    print("Invalid input: {} should be > 1".format(number))
-                elif number == 4:
-                    p = number // 2
-                    q = number // p
-                    print("{} = {} * {}".format(number, p, q))
-                else:
-                    result = factorize_with_pollard_rho(number)
-                    print(result)
-    except FileNotFoundError:
-        print("Error: File {} not found".format(sys.argv[1]))
-        sys.exit(1)
-    except ValueError:
-        print("Error: Invalid input in the file")
-        sys.exit(1)
+try:
+    with open(sys.argv[1], 'r') as file:
+        for line in file:
+            number = int(line.strip())
+            if number <= 1:
+                print("Invalid input: {} should be > 1".format(number))
+            else:
+                factorise(number)
+except FileNotFoundError:
+    print("Error: File {} not found".format(sys.argv[1]))
+    sys.exit(1)
+except ValueError:
+    print("Error: Invalid input in the file")
+    sys.exit(1)
