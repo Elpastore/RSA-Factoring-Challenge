@@ -1,0 +1,33 @@
+#!/usr/bin/python3
+"""
+Factorise numbers into a product of two prime numbers
+"""
+
+import sys
+
+
+def factorise():
+    """
+    Open file and factorise a given number
+    """
+    try:
+        with open(sys.argv[1]) as file:
+            for line in file:
+                line = int(line)
+
+                if line % 2 == 0:
+                    print("{}={}*{}".format(line, line // 2, 2))
+                    continue
+                i = 3
+                while i < line // 2:
+                    if line % i == 0:
+                        print("{}={}*{}".format(line, line // i, i))
+                        break
+                    i += 2
+                if i == (line // 2) + 1:
+                    print("{}={}*{}".format(line, line, 1))
+    except (IndexError):
+        pass
+
+
+factorise()
